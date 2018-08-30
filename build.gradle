@@ -35,9 +35,21 @@ ext {
 
     jUnitVersion = "4.12"
     mrVectorVersion = "0.2.0"
+    espresso = "3.0.2"
     testImplementationVersion = "1.0.1"
     constraintLayoutVersion = '1.1.2'
-    glideVersion = '3.8.0'
+    multidex = "1.0.3"
+
+    glide = '3.8.0'
     room_version = "1.1.1"
+    timber = "4.7.1"
+    dagger = "2.8"
+    loggingInterceptor = "3.9.1"
+    okhttp = "3.10.0"
+    retrofit = "2.1.0"
+
+    gson = "2.8.0"
+    gsonConvertor = "2.3.0"
+    jodatime = "1.2.0"
 
 }

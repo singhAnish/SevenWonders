@@ -8,26 +8,31 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
-import sampleproject.android.com.TestProject.MyApp;
 import sampleproject.android.com.TestProject.R;
+import sampleproject.android.com.TestProject.database.AppDatabase;
 import sampleproject.android.com.TestProject.model.WonderActivityModelData;
+import sampleproject.android.com.TestProject.ui.activity.wonder.WonderActivity;
 
 public class WonderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<WonderActivityModelData> mModel;
+    private RequestManager mManager;
+    private WonderActivity mActivity;
 
-    public WonderAdapter() {
-        this.mModel  = MyApp.get().getDatabase().wonderDao().getWonderData();
+    public WonderAdapter(WonderActivity activity, RequestManager manager, AppDatabase db) {
+        this.mActivity = activity;
+        this.mManager = manager;
+        this.mModel  = db.wonderDao().getWonderData();
     }
 
     @Override @NonNull
     public WonderAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_place, parent, false);
+        View itemView = LayoutInflater.from(mActivity).inflate(R.layout.list_place, parent, false);
         return new WonderAdapter.MyViewHolder(itemView);
     }
 
@@ -37,7 +42,7 @@ public class WonderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final WonderActivityModelData model = mModel.get(position);
         holder.placeName.setText(model.getPlace());
 
-        Glide.with(MyApp.get().getContext()).load(model.getUrl())
+        mManager.load(model.getUrl())
                 .thumbnail(0.05f)//it will download 5% quality of image followed by original image(Progressive image for better user experience)
                 .placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background)
                 .fallback(R.drawable.ic_launcher_background)// In case when something goes wrong

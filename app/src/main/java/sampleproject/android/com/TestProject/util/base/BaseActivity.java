@@ -8,7 +8,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import sampleproject.android.com.TestProject.R;
@@ -28,12 +27,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Local.hideSoftKeys(BaseActivity.this);
-                onBackPressed();
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            Local.hideSoftKeys(this);
+            onBackPressed();
         });
         onViewReady(savedInstanceState, getIntent());
     }

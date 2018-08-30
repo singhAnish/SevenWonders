@@ -1,4 +1,4 @@
-package sampleproject.android.com.TestProject.util.apiInterface;
+package sampleproject.android.com.TestProject.network;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -1,13 +1,16 @@
 package sampleproject.android.com.TestProject.presenter;
 
-import sampleproject.android.com.TestProject.MyApp;
 import sampleproject.android.com.TestProject.contract.WonderContract.Presenter;
 import sampleproject.android.com.TestProject.contract.WonderContract.View;
+import sampleproject.android.com.TestProject.database.AppDatabase;
 import sampleproject.android.com.TestProject.util.base.BasePresenter;
 
 public class WonderPresenter extends BasePresenter<View> implements Presenter {
 
-    public WonderPresenter(View view) {
+    private AppDatabase mDB;
+
+    public WonderPresenter(View view, AppDatabase db) {
+        this.mDB = db;
         this.view = view;
         loadData();
     }
@@ -17,12 +20,11 @@ public class WonderPresenter extends BasePresenter<View> implements Presenter {
         if (view == null) {
             return;
         }
-        if (MyApp.get().getDatabase().wonderDao().getWonderData().size() > 0) {
+        if (mDB.wonderDao().getWonderData().size() > 0) {
             loadGridView();
         } else {
             view.loadContentFromAPI();
         }
-        //view.loadContentFromAPI();
     }
 
     @Override

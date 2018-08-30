@@ -28,7 +28,7 @@ public class ConnectionDetector {
     }
 
     /**
-     * =========If connection, then boolean will return true===========
+     * =========If connection available, then boolean will return true===========
      **/
     public static boolean isConnected() {
         if(!isConnected){

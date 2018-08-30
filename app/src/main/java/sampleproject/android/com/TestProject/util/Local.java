@@ -11,30 +11,30 @@ import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import sampleproject.android.com.TestProject.MyApp;
+import sampleproject.android.com.TestProject.app.MyApp;
 
 public class Local {
 
     public static String getString(int string) {
-        return MyApp.get().getContext().getResources().getString(string);
+        return MyApp.getContext().getResources().getString(string);
     }
 
     public static int getDimen(int dimen) {
-        return (int) MyApp.get().getContext().getResources().getDimension(dimen);
+        return (int) MyApp.getContext().getResources().getDimension(dimen);
     }
 
     public static int getColor(int color) {
-        return ContextCompat.getColor(MyApp.get().getContext(), color);
+        return ContextCompat.getColor(MyApp.getContext(), color);
     }
 
     public static Drawable getDrawable(int drawable) {
-        return ContextCompat.getDrawable(MyApp.get().getContext(), drawable);
+        return ContextCompat.getDrawable(MyApp.getContext(), drawable);
     }
 
     public static String getStringFromResourceKey(String resourceKey) {
         int resId;
         try {
-            resId = MyApp.get().getContext().getResources().getIdentifier(resourceKey, "string", MyApp.get().getContext().getPackageName());
+            resId = MyApp.getContext().getResources().getIdentifier(resourceKey, "string", MyApp.getContext().getPackageName());
         } catch (Exception e) {
             resId = 0;
         }
@@ -60,13 +60,13 @@ public class Local {
     }
 
     public static void toastMessage(int msg) {
-        Toast toast = Toast.makeText(MyApp.get().getContext(), getString(msg), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(MyApp.getContext(), getString(msg), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
 
     public static void toastStringMessage(String msg) {
-        Toast toast = Toast.makeText(MyApp.get().getContext(), msg, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(MyApp.getContext(), msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
@@ -76,16 +76,14 @@ public class Local {
             InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null && imm.isActive()) {
                 Handler hideKeyPad = new Handler(Looper.getMainLooper());
-                hideKeyPad.post(new Runnable() {
-                    public void run() {
-                        try {
-                            InputMethodManager inputManager = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            if (inputManager != null && mActivity.getCurrentFocus() != null) {
-                                inputManager.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                hideKeyPad.post(() -> {
+                    try {
+                        InputMethodManager inputManager = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (inputManager != null && mActivity.getCurrentFocus() != null) {
+                            inputManager.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
             }

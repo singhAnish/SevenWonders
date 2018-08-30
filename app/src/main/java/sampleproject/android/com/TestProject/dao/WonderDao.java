@@ -10,7 +10,6 @@ import sampleproject.android.com.TestProject.model.WonderActivityModelData;
 
 @Dao
 public interface WonderDao {
-
     @Query("SELECT * FROM WonderActivityModelData")
     List<WonderActivityModelData> getWonderData();
 
