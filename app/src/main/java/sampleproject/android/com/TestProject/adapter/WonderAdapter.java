@@ -13,6 +13,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import sampleproject.android.com.TestProject.R;
 import sampleproject.android.com.TestProject.database.AppDatabase;
 import sampleproject.android.com.TestProject.model.WonderActivityModelData;
@@ -24,7 +26,8 @@ public class WonderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private RequestManager mManager;
     private WonderActivity mActivity;
 
-    public WonderAdapter(WonderActivity activity, RequestManager manager, AppDatabase db) {
+    @Inject
+    WonderAdapter(WonderActivity activity, RequestManager manager, AppDatabase db) {
         this.mActivity = activity;
         this.mManager = manager;
         this.mModel  = db.wonderDao().getWonderData();

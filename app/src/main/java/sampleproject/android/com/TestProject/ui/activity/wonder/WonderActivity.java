@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -16,8 +18,10 @@ import sampleproject.android.com.TestProject.R;
 import sampleproject.android.com.TestProject.adapter.WonderAdapter;
 import sampleproject.android.com.TestProject.app.MyApp;
 import sampleproject.android.com.TestProject.contract.WonderContract.View;
+import sampleproject.android.com.TestProject.database.AppDatabase;
 import sampleproject.android.com.TestProject.model.WonderActivityModel;
 import sampleproject.android.com.TestProject.model.WonderActivityModelData;
+import sampleproject.android.com.TestProject.network.APIInterface;
 import sampleproject.android.com.TestProject.presenter.WonderPresenter;
 import sampleproject.android.com.TestProject.ui.activity.wonder.di.DaggerWonderComponent;
 import sampleproject.android.com.TestProject.ui.activity.wonder.di.WonderComponent;
@@ -30,7 +34,10 @@ public class WonderActivity extends BaseActivity implements View {
 
     private WonderPresenter mPresenter;
     private RecyclerView mRecycler;
-    private WonderComponent component;
+
+    @Inject AppDatabase mDB;
+    @Inject APIInterface mInterface;
+    @Inject WonderAdapter mAdapter;
 
     @Override
     protected int getContentView() {
@@ -42,8 +49,11 @@ public class WonderActivity extends BaseActivity implements View {
         super.onViewReady(savedInstanceState, intent);
         showBackTitle(Local.getString(R.string.app_name));
         mRecycler = findViewById(R.id.recyclerView);
-        component = DaggerWonderComponent.builder().wonderModule(new WonderModule(this)).appComponent(MyApp.get(this).getComponent()).build();
-        mPresenter = new WonderPresenter(this, component.getDataBase());
+
+        WonderComponent component = DaggerWonderComponent.builder()
+                .wonderModule(new WonderModule(this)).appComponent(MyApp.get(this).getComponent()).build();
+        component.inject(this);
+        mPresenter = new WonderPresenter(this, mDB);
     }
 
     @Override
@@ -62,18 +72,18 @@ public class WonderActivity extends BaseActivity implements View {
     public void loadContentFromAPI() {
         if (ConnectionDetector.isConnected()) {
             showDialog();
-            Call<WonderActivityModel> call = component.getAPIInterface().getMovieListData();
+            Call<WonderActivityModel> call = mInterface.getMovieListData();
             call.enqueue(new Callback<WonderActivityModel>() {
                 @Override
                 public void onResponse(@NonNull Call<WonderActivityModel> call, @NonNull Response<WonderActivityModel> response) {
                     if (response.isSuccessful()) {
                         dismissDialog();
-                        component.getDataBase().wonderDao().clearWonderData();
+                        mDB.wonderDao().clearWonderData();
                         WonderActivityModel movieList = response.body();
                         if(movieList != null) {
                             ArrayList<WonderActivityModelData> mModel = new ArrayList<>(Arrays.asList(movieList.getData()));
                             for (int i = 0; i < mModel.size(); i++) {
-                                component.getDataBase().wonderDao().insertWonderData(mModel.get(i));
+                                mDB.wonderDao().insertWonderData(mModel.get(i));
                             }
                             mPresenter.loadGridView();
                         }else{
@@ -96,7 +106,6 @@ public class WonderActivity extends BaseActivity implements View {
     @Override
     public void updateGridView() {
         mRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        WonderAdapter mAdapter = component.wonderAdapter();
         mRecycler.setAdapter(mAdapter);
     }
 }
