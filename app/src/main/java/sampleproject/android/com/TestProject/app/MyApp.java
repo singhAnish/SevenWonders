@@ -30,7 +30,6 @@ public class MyApp extends Application {
         ConnectionDetector.getDetector().initConnectionState(this);
 
         Timber.plant(new Timber.DebugTree());
-        //Initializing Dagger
         component = DaggerAppComponent.builder().contextModule(new ContextModule(this)).build();
     }
 

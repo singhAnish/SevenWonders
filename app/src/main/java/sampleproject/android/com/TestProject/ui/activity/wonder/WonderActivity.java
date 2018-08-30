@@ -32,12 +32,12 @@ import sampleproject.android.com.TestProject.util.base.BaseActivity;
 
 public class WonderActivity extends BaseActivity implements View {
 
-    private WonderPresenter mPresenter;
     private RecyclerView mRecycler;
 
     @Inject AppDatabase mDB;
     @Inject APIInterface mInterface;
     @Inject WonderAdapter mAdapter;
+    @Inject WonderPresenter mPresenter;
 
     @Override
     protected int getContentView() {
@@ -51,9 +51,10 @@ public class WonderActivity extends BaseActivity implements View {
         mRecycler = findViewById(R.id.recyclerView);
 
         WonderComponent component = DaggerWonderComponent.builder()
-                .wonderModule(new WonderModule(this)).appComponent(MyApp.get(this).getComponent()).build();
+                .wonderModule(new WonderModule(this, this)).appComponent(MyApp.get(this).getComponent()).build();
         component.inject(this);
-        mPresenter = new WonderPresenter(this, mDB);
+
+        mPresenter.loadData();
     }
 
     @Override

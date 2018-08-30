@@ -11,17 +11,14 @@ public class WonderPresenter extends BasePresenter<View> implements Presenter {
 
     private AppDatabase mDB;
 
-    public WonderPresenter(View view, AppDatabase db) {
-        this.mDB = db;
+    @Inject
+    WonderPresenter(View view, AppDatabase db) {
         this.view = view;
-        loadData();
+        this.mDB = db;
     }
 
     @Override
     public void loadData() {
-        if (view == null) {
-            return;
-        }
         if (mDB.wonderDao().getWonderData().size() > 0) {
             loadGridView();
         } else {
@@ -31,9 +28,6 @@ public class WonderPresenter extends BasePresenter<View> implements Presenter {
 
     @Override
     public void loadGridView() {
-        if (view == null) {
-            return;
-        }
         view.updateGridView();
     }
 }
