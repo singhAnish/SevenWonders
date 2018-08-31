@@ -22,12 +22,11 @@ public class WonderPresenter extends BasePresenter<View> implements Presenter {
 
     @Override
     public void loadData() {
-        /*if (mDB.wonderDao().getWonderData().size() > 0) {
+        if (mDB.wonderDao().getWonderData().size() > 0) {
             loadGridView();
         } else {
             view.loadContentFromAPI();
-        }*/
-        view.loadContentFromAPI();
+        }
     }
 
     @Override
