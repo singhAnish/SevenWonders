@@ -4,12 +4,12 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity
-public class WonderActivityModel{
+public class WonderModel {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private WonderActivityModelData[] data;
+    private WonderModelData[] data;
 
     public int getId() {
         return id;
@@ -18,11 +18,11 @@ public class WonderActivityModel{
         this.id = id;
     }
 
-    public WonderActivityModelData[] getData() {
+    public WonderModelData[] getData() {
         return this.data;
     }
 
-    public void setData(WonderActivityModelData[] data) {
+    public void setData(WonderModelData[] data) {
         this.data = data;
     }
 }

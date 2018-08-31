@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 
 import org.joda.time.DateTime;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -14,6 +16,7 @@ import sampleproject.android.com.TestProject.BuildConfig;
 import sampleproject.android.com.TestProject.network.APIInterface;
 import sampleproject.android.com.TestProject.network.DateTimeConverter;
 
+@Singleton
 @Module(includes = NetworkModule.class) //include annotation will provide corresponding dependencies
 public class AppModule {
 

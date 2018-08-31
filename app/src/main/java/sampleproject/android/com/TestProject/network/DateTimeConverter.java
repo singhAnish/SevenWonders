@@ -14,8 +14,7 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import java.lang.reflect.Type;
 
-public class DateTimeConverter implements JsonSerializer<DateTime>, JsonDeserializer<DateTime>
-{
+public class DateTimeConverter implements JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
     /**
      * Gson invokes this call-back method during serialization when it encounters a field of the
      * specified type. <p>
@@ -30,8 +29,7 @@ public class DateTimeConverter implements JsonSerializer<DateTime>, JsonDeserial
      * @return a JsonElement corresponding to the specified object.
      */
     @Override
-    public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context)
-    {
+    public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
         final DateTimeFormatter fmt = ISODateTimeFormat.dateTimeParser();
         return new JsonPrimitive(fmt.print(src));
     }
@@ -51,15 +49,11 @@ public class DateTimeConverter implements JsonSerializer<DateTime>, JsonDeserial
      * @throws JsonParseException if json is not in the expected format of {@code typeOfT}
      */
     @Override
-    public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException
-    {
+    public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         // Do not try to deserialize null or empty values
-        if (json.getAsString() == null || json.getAsString().isEmpty())
-        {
+        if (json.getAsString() == null || json.getAsString().isEmpty()) {
             return null;
         }
-
         final DateTimeFormatter fmt = ISODateTimeFormat.dateTimeParser();
         return fmt.parseDateTime(json.getAsString());
     }

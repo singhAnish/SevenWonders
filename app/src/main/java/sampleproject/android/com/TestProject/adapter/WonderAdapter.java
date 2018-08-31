@@ -17,12 +17,12 @@ import javax.inject.Inject;
 
 import sampleproject.android.com.TestProject.R;
 import sampleproject.android.com.TestProject.database.AppDatabase;
-import sampleproject.android.com.TestProject.model.WonderActivityModelData;
+import sampleproject.android.com.TestProject.model.WonderModelData;
 import sampleproject.android.com.TestProject.ui.activity.wonder.WonderActivity;
 
 public class WonderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<WonderActivityModelData> mModel;
+    private List<WonderModelData> mModel;
     private RequestManager mManager;
     private WonderActivity mActivity;
 
@@ -42,7 +42,7 @@ public class WonderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder itemHolder, int position) {
         MyViewHolder holder = (MyViewHolder) itemHolder;
-        final WonderActivityModelData model = mModel.get(position);
+        final WonderModelData model = mModel.get(position);
         holder.placeName.setText(model.getPlace());
 
         mManager.load(model.getUrl())

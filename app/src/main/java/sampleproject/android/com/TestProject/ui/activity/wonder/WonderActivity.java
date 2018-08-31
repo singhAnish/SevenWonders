@@ -6,9 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.inject.Inject;
 
 import retrofit2.Call;
@@ -19,8 +16,8 @@ import sampleproject.android.com.TestProject.adapter.WonderAdapter;
 import sampleproject.android.com.TestProject.app.MyApp;
 import sampleproject.android.com.TestProject.contract.WonderContract.View;
 import sampleproject.android.com.TestProject.database.AppDatabase;
-import sampleproject.android.com.TestProject.model.WonderActivityModel;
-import sampleproject.android.com.TestProject.model.WonderActivityModelData;
+import sampleproject.android.com.TestProject.model.WonderModel;
+import sampleproject.android.com.TestProject.model.WonderModelData;
 import sampleproject.android.com.TestProject.network.APIInterface;
 import sampleproject.android.com.TestProject.presenter.WonderPresenter;
 import sampleproject.android.com.TestProject.ui.activity.wonder.di.DaggerWonderComponent;
@@ -38,6 +35,7 @@ public class WonderActivity extends BaseActivity implements View {
     @Inject APIInterface mInterface;
     @Inject WonderAdapter mAdapter;
     @Inject WonderPresenter mPresenter;
+    @Inject WonderActivity mActivity;
 
     @Override
     protected int getContentView() {
@@ -50,10 +48,8 @@ public class WonderActivity extends BaseActivity implements View {
         showBackTitle(Local.getString(R.string.app_name));
         mRecycler = findViewById(R.id.recyclerView);
 
-        WonderComponent component = DaggerWonderComponent.builder()
-                .wonderModule(new WonderModule(this, this)).appComponent(MyApp.get(this).getComponent()).build();
+        WonderComponent component = DaggerWonderComponent.builder().wonderModule(new WonderModule(this, this)).appComponent(MyApp.get(this).getComponent()).build();
         component.inject(this);
-
         mPresenter.loadData();
     }
 
@@ -73,18 +69,18 @@ public class WonderActivity extends BaseActivity implements View {
     public void loadContentFromAPI() {
         if (ConnectionDetector.isConnected()) {
             showDialog();
-            Call<WonderActivityModel> call = mInterface.getMovieListData();
-            call.enqueue(new Callback<WonderActivityModel>() {
+            Call<WonderModel> call = mInterface.getMovieListData();
+            call.enqueue(new Callback<WonderModel>() {
                 @Override
-                public void onResponse(@NonNull Call<WonderActivityModel> call, @NonNull Response<WonderActivityModel> response) {
+                public void onResponse(@NonNull Call<WonderModel> call, @NonNull Response<WonderModel> response) {
                     if (response.isSuccessful()) {
                         dismissDialog();
                         mDB.wonderDao().clearWonderData();
-                        WonderActivityModel movieList = response.body();
-                        if(movieList != null) {
-                            ArrayList<WonderActivityModelData> mModel = new ArrayList<>(Arrays.asList(movieList.getData()));
-                            for (int i = 0; i < mModel.size(); i++) {
-                                mDB.wonderDao().insertWonderData(mModel.get(i));
+                        WonderModel movieList = response.body();
+                        if(movieList != null && movieList.getData().length > 0) {
+                            WonderModelData[] data = movieList.getData();
+                            for (WonderModelData aData : data) {
+                                mDB.wonderDao().insertWonderData(aData);
                             }
                             mPresenter.loadGridView();
                         }else{
@@ -96,7 +92,7 @@ public class WonderActivity extends BaseActivity implements View {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<WonderActivityModel> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<WonderModel> call, @NonNull Throwable t) {
                     dismissDialog();
                     t.printStackTrace();
                 }
@@ -106,7 +102,7 @@ public class WonderActivity extends BaseActivity implements View {
 
     @Override
     public void updateGridView() {
-        mRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        mRecycler.setLayoutManager(new GridLayoutManager(mActivity, 2));
         mRecycler.setAdapter(mAdapter);
     }
 }

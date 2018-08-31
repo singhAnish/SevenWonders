@@ -4,7 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.support.annotation.NonNull;
 
 @Entity(primaryKeys = {"place"})
-public class WonderActivityModelData {
+public class WonderModelData {
 
     @NonNull
     private String place = "";

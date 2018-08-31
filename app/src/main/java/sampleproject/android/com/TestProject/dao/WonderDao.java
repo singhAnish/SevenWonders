@@ -6,16 +6,16 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import sampleproject.android.com.TestProject.model.WonderActivityModelData;
+import sampleproject.android.com.TestProject.model.WonderModelData;
 
 @Dao
 public interface WonderDao {
-    @Query("SELECT * FROM WonderActivityModelData")
-    List<WonderActivityModelData> getWonderData();
+    @Query("SELECT * FROM WonderModelData")
+    List<WonderModelData> getWonderData();
 
     @Insert
-    void insertWonderData(WonderActivityModelData... model);
+    void insertWonderData(WonderModelData... model);
 
-    @Query("DELETE FROM WonderActivityModelData")
+    @Query("DELETE FROM WonderModelData")
     void clearWonderData();
 }
